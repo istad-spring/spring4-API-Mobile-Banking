@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +18,33 @@ import java.time.LocalDateTime;
 public class UserRestController {
 
     private final UserService userService;
+
+    @GetMapping("/{id}")
+    public BaseApi<?> findById(@PathVariable Integer id) {
+        UserDto userDto = userService.findById(id);
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("User has been found")
+                .timestamp(LocalDateTime.now())
+                .data(userDto)
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    public BaseApi<?> updateById(@PathVariable Integer id,
+                                 @Valid @RequestBody SaveUserDto saveUserDto) {
+
+        UserDto userDto = userService.updateById(id, saveUserDto);
+
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("User has been saved")
+                .timestamp(LocalDateTime.now())
+                .data(userDto)
+                .build();
+    }
 
     @PostMapping
     public BaseApi<?> create(@Valid @RequestBody SaveUserDto saveUserDto) {

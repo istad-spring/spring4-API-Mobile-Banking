@@ -9,6 +9,12 @@ import java.util.Optional;
 @Repository
 public interface UserMapper {
 
+    @UpdateProvider(type = UserProvider.class, method = "buildUpdateSql")
+    void update(@Param("u") User user);
+
+    @Select("SELECT EXISTS(SELECT * FROM users WHERE id = #{id} AND is_deleted = FALSE)")
+    boolean existsById(@Param("id") Integer id);
+
     @InsertProvider(type = UserProvider.class,
         method = "buildInsertSql")
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
