@@ -27,6 +27,14 @@ public class UserProvider {
         }}.toString();
     }
 
+    public String buildSelectWithPagingSql() {
+        return new SQL() {{
+            SELECT("*");
+            FROM(USERS);
+            WHERE("is_deleted = FALSE");
+        }}.toString();
+    }
+
     public String buildInsertSql() {
         return new SQL() {{
             INSERT_INTO(USERS);

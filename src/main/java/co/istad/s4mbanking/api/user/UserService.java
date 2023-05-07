@@ -2,8 +2,11 @@ package co.istad.s4mbanking.api.user;
 
 import co.istad.s4mbanking.api.user.web.SaveUserDto;
 import co.istad.s4mbanking.api.user.web.UserDto;
+import com.github.pagehelper.PageInfo;
 
 public interface UserService {
+
+    PageInfo<UserDto> findWithPaging(int pageNum, int pageSize);
 
     UserDto findById(Integer id);
 

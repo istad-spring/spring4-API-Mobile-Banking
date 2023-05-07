@@ -2,17 +2,32 @@ package co.istad.s4mbanking.api.user;
 
 import co.istad.s4mbanking.api.user.web.SaveUserDto;
 import co.istad.s4mbanking.api.user.web.UserDto;
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserMapStruct userMapStruct;
+
+    @Override
+    public PageInfo<UserDto> findWithPaging(int pageNum, int pageSize) {
+
+        // TODO: call method select in mybatis mapper
+        PageInfo<User> userPageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(userMapper::select);
+
+        return userMapStruct.userPageInfoToUserDtoPageInfo(userPageInfo);
+    }
 
     @Override
     public UserDto findById(Integer id) {

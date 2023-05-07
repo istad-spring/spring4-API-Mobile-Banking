@@ -3,6 +3,7 @@ package co.istad.s4mbanking.api.user;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -12,7 +13,11 @@ public interface UserMapper {
     @UpdateProvider(type = UserProvider.class, method = "buildUpdateSql")
     void update(@Param("u") User user);
 
-    @Select("SELECT EXISTS(SELECT * FROM users WHERE id = #{id} AND is_deleted = FALSE)")
+    @Select("""
+            SELECT EXISTS(SELECT *
+            FROM users
+            WHERE id = #{id} AND is_deleted = FALSE)
+            """)
     boolean existsById(@Param("id") Integer id);
 
     @InsertProvider(type = UserProvider.class,
@@ -27,5 +32,9 @@ public interface UserMapper {
             @Result(column = "student_card_id", property = "studentCardId")
     })
     Optional<User> selectById(@Param("id") Integer id);
+
+    @SelectProvider(type = UserProvider.class, method = "buildSelectWithPagingSql")
+    @ResultMap("userResultMap")
+    List<User> select();
 
 }
