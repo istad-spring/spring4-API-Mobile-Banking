@@ -10,6 +10,9 @@ import java.util.Optional;
 @Repository
 public interface UserMapper {
 
+    @UpdateProvider(type = UserProvider.class, method = "buildUpdateIsDeletedSql")
+    void updateIsDeleted(@Param("id") Integer id, @Param("status") Boolean status);
+
     @UpdateProvider(type = UserProvider.class, method = "buildUpdateSql")
     void update(@Param("u") User user);
 

@@ -20,6 +20,21 @@ public class UserServiceImpl implements UserService {
     private final UserMapStruct userMapStruct;
 
     @Override
+    public UserDto deleteById(Integer id) {
+
+        if (userMapper.existsById(id)) {
+            UserDto userDto = findById(id);
+            userMapper.updateIsDeleted(id, true);
+            return userDto;
+        }
+
+        // Throw your business exception
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                String.format("User with ID = %d is not found in DB", id));
+
+    }
+
+    @Override
     public PageInfo<UserDto> findWithPaging(int pageNum, int pageSize) {
 
         // TODO: call method select in mybatis mapper

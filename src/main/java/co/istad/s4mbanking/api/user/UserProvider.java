@@ -6,6 +6,14 @@ public class UserProvider {
 
     private final String USERS = "users";
 
+    public String buildUpdateIsDeletedSql() {
+        return new SQL() {{
+            UPDATE(USERS);
+            SET("is_deleted = #{status}");
+            WHERE("id = #{id}");
+        }}.toString();
+    }
+
     public String buildUpdateSql() {
         return new SQL() {{
             UPDATE(USERS);

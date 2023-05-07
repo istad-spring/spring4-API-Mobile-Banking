@@ -6,6 +6,8 @@ import com.github.pagehelper.PageInfo;
 
 public interface UserService {
 
+    UserDto deleteById(Integer id);
+
     PageInfo<UserDto> findWithPaging(int pageNum, int pageSize);
 
     UserDto findById(Integer id);
