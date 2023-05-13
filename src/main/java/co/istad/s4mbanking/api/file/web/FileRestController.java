@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/files")
@@ -34,6 +35,22 @@ public class FileRestController {
                 .message("File has been uploaded")
                 .timestamp(LocalDateTime.now())
                 .data(fileDto)
+                .build();
+    }
+
+    @PostMapping("/multiple")
+    public BaseApi<?> uploadMultiple(@RequestPart("files") List<MultipartFile> files) {
+
+        log.info("Request file upload = {}", files);
+
+        List<FileDto> filesDto = fileService.uploadMultiple(files);
+
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("Files have been uploaded")
+                .timestamp(LocalDateTime.now())
+                .data(filesDto)
                 .build();
     }
 
