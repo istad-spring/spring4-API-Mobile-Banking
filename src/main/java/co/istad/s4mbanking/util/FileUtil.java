@@ -25,6 +25,9 @@ public class FileUtil {
     @Value("${file.server-path}")
     private String fileServerPath;
 
+    @Value("${file.download-url}")
+    private String fileDownloadUrl;
+
     public FileDto upload(MultipartFile file) {
 
         String extension = getExtension(file.getOriginalFilename());
@@ -46,6 +49,7 @@ public class FileUtil {
                 .extension(extension)
                 .size(size)
                 .url(url)
+                .downloadUrl(fileDownloadUrl + name)
                 .build();
     }
 
@@ -67,6 +71,10 @@ public class FileUtil {
 
     public String getUrl(String name) {
         return fileBaseUrl + name;
+    }
+
+    public String getDownloadUrl(String name) {
+        return fileDownloadUrl + name;
     }
 
 }
