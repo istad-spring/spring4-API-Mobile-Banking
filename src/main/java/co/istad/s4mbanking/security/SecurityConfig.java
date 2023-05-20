@@ -29,17 +29,15 @@ public class SecurityConfig {
 
         // Disable CSRF
         http.csrf(token -> token.disable());
+        http.cors();
 
         // Configure HTTP mapping URL
         http.authorizeHttpRequests(auth -> {
 
-            auth.requestMatchers("/api/v1/users/**").hasRole("ADMIN");
-
-            auth.requestMatchers(HttpMethod.POST, "/api/v1/account-types/**",
-                    "/api/v1/files/**").hasRole("EDITOR");
-
-            auth.requestMatchers(HttpMethod.GET, "/api/v1/account-types/**",
-                    "/api/v1/files/**").hasAnyRole("EDITOR", "AUTHOR");
+            auth.requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole("SYSTEM");
+            auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("SYSTEM");
+            auth.requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole("SYSTEM");
+            auth.requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole("SYSTEM", "ADMIN");
 
             auth.anyRequest().authenticated();
         });

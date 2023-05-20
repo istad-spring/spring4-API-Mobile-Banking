@@ -24,8 +24,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = authMapper.selectByEmail(username).orElseThrow(()
             -> new UsernameNotFoundException("User is not found!"));
 
-        log.info(user.getEmail());
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        customUserDetails.setUser(user);
 
-        return null;
+        log.info(customUserDetails.getUsername());
+        log.info(customUserDetails.getPassword());
+        log.info(customUserDetails.getUser().getRoles().toString());
+
+        return customUserDetails;
     }
 }
