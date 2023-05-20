@@ -3,11 +3,14 @@ package co.istad.s4mbanking.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
 
     // 1. Define Bean: SecurityFilterChain
     @Bean
@@ -28,6 +32,15 @@ public class SecurityConfig {
 
         // Configure HTTP mapping URL
         http.authorizeHttpRequests(auth -> {
+
+            auth.requestMatchers("/api/v1/users/**").hasRole("ADMIN");
+
+            auth.requestMatchers(HttpMethod.POST, "/api/v1/account-types/**",
+                    "/api/v1/files/**").hasRole("EDITOR");
+
+            auth.requestMatchers(HttpMethod.GET, "/api/v1/account-types/**",
+                    "/api/v1/files/**").hasAnyRole("EDITOR", "AUTHOR");
+
             auth.anyRequest().authenticated();
         });
 
@@ -44,6 +57,18 @@ public class SecurityConfig {
 
     // 2. Define Bean: AuthenticationManager
     @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+
+        return authProvider;
+    }
+
+
+
+    /*@Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
 
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -74,6 +99,6 @@ public class SecurityConfig {
         manager.createUser(author);
 
         return manager;
-    }
+    }*/
 
 }
