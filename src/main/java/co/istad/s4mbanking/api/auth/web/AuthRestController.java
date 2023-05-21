@@ -35,5 +35,18 @@ public class AuthRestController {
     }
 
     // 2. Log in
+    @PostMapping("/login")
+    public BaseApi<?> login(@RequestBody LogInDto logInDto) {
+
+        AuthDto authDto = authService.login(logInDto);
+
+        return BaseApi.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("You have been logged in successfully")
+                .timestamp(LocalDateTime.now())
+                .data(authDto)
+                .build();
+    }
 
 }
