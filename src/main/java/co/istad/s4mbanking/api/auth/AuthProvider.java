@@ -4,6 +4,23 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class AuthProvider {
 
+    public String buildRegisterSql() {
+        return new SQL() {{
+            INSERT_INTO("users");
+            VALUES("email", "#{u.email}");
+            VALUES("password", "#{u.password}");
+            VALUES("is_deleted", "FALSE");
+        }}.toString();
+    }
+
+    public String buildCreateUserRolesSql() {
+        return new SQL() {{
+            INSERT_INTO("users_roles");
+            VALUES("user_id", "#{userId}");
+            VALUES("role_id", "#{roleId}");
+        }}.toString();
+    }
+
     public String buildSelectByEmailSql() {
         return new SQL() {{
             SELECT("*");

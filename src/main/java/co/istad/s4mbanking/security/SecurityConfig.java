@@ -34,6 +34,8 @@ public class SecurityConfig {
         // Configure HTTP mapping URL
         http.authorizeHttpRequests(auth -> {
 
+            auth.requestMatchers("/api/v1/auth/**").permitAll();
+
             auth.requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole("SYSTEM");
             auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("SYSTEM");
             auth.requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole("SYSTEM");
