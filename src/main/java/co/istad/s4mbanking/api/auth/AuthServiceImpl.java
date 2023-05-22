@@ -56,7 +56,8 @@ public class AuthServiceImpl implements AuthService {
         //log.info("Auth: {}", customUserDetails.getUser().getEmail());
 
         String basicAuthString = String.format("%s:%s", auth.getName(), auth.getCredentials());
-        String basicAuthHeader = Base64.getEncoder().encodeToString(basicAuthString.getBytes());
+        String basicAuthHeader = Base64.getEncoder()
+                .encodeToString(basicAuthString.getBytes());
 
         return new AuthDto(String.format("Basic %s", basicAuthHeader));
 

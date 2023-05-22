@@ -2,6 +2,7 @@ package co.istad.s4mbanking.api.auth.web;
 
 import co.istad.s4mbanking.api.auth.AuthService;
 import co.istad.s4mbanking.base.BaseApi;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,7 @@ public class AuthRestController {
 
     // 2. Log in
     @PostMapping("/login")
+    @ApiResponse(description = "User can log in with email and password")
     public BaseApi<?> login(@RequestBody LogInDto logInDto) {
 
         AuthDto authDto = authService.login(logInDto);
